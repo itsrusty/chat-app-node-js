@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+  <head>
+    <title>Mafcy</title>
+  </head>
+  <body>
+    
+    <div class="div">
+      <div class="message-container">
+          <ul id="messages"></ul>
+      </div>
+    </div>
+
+    <div class="container">
+      <form id="form" action="#">
+        <input id="input" autocomplete="off" placeholder="Escribe tu mensaje aquí"><button>Send</button>
+      </form>
+    </div>
+
+
+<!-- styles -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+  body {
+    background: #0a192f; 
+    margin: 0; 
+    padding-bottom: 3rem; 
+    font-family: 'Poppins', sans-serif;
+  }
+  .container form{
+    width: 80%;
+    margin: 100px auto;
+  }
+  #form {
+     /* background: rgba(0, 0, 0, 0.15); */
+      padding: 0.25rem;
+      position: fixed;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     display: flex;
+     justify-content: center;
+     height: 3rem;
+     box-sizing: border-box;
+     backdrop-filter: blur(10px); 
+      }
+    form button{
+      padding: 10px;
+      border: none;
+      outline: none;
+      width: 120px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    form button:active{
+      transform: scale(.9);
+    }
+  #input {
+     border: none;
+     padding: 0 1rem;
+     width: 220px;
+     border-radius: 5px;
+     text-align: center; 
+    }
+  #input:focus {
+     outline: none;
+     }
+  #messages { 
+    list-style-type: none;
+    margin: 0;
+     padding: 0;
+    color: #fff;
+   }
+   .div{
+     width: 80%;
+     margin: 0px auto;
+     background: #0e2a53;
+   }
+  #messages > li { 
+    padding: 0.5rem 1rem; 
+  }
+  /* #messages > li:nth-child(odd) { 
+    background: #efefef; 
+  } */
+
+
+</style>
+
+
+    <!-- use socket -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+    
+      var form = document.getElementById('form');
+      var input = document.getElementById('input');
+    
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit('chat message', input.value);
+          input.value = '';
+        }
+      });
+
+      // imprimimos el msj
+       socket.on('chat message', function(msg) {
+           var item = document.createElement('li');
+           item.innerText = `MENSAJE: ${msg}`;
+           messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
+  });
+
+    </script>
+  </body>
+</html>
